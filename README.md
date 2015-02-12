@@ -1,5 +1,5 @@
 # We&Factory's ADS WIFI project.
-## Demo sites : http://kesl.iptime.org/chart/dash/ADS/
+## Demo sites : http://kesl.iptime.org/chart/dash/ads/
 - This webpage informs admin information of customers near stores of in stores.
 
 - Tools (Web&Server)
