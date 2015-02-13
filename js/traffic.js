@@ -1,4 +1,28 @@
- jQuery(document).ready(function() {
+jQuery(document).ready(function() {
+
+	var db_data = [
+			{ y: '2015-2-1', a: 30,  b: 20 },
+			{ y: '2015-2-2', a: 75,  b: 65 },
+			{ y: '2015-2-3', a: 50,  b: 40 },
+			{ y: '2015-2-4', a: 75,  b: 65 },
+			{ y: '2015-2-5', a: 50,  b: 40 },
+			{ y: '2015-2-6', a: 75,  b: 65 },
+			{ y: '2015-2-7', a: 100, b: 90 },
+			{ y: '2015-2-12', a: 30,  b: 20 },
+			{ y: '2015-2-13', a: 75,  b: 65 },
+			{ y: '2015-2-14', a: 50,  b: 40 },
+			{ y: '2015-2-15', a: 75,  b: 65 },
+			{ y: '2015-2-16', a: 50,  b: 40 },
+			{ y: '2015-2-17', a: 75,  b: 65 },
+			{ y: '2015-2-18', a: 100, b: 90 },
+			{ y: '2015-2-19', a: 30,  b: 20 },
+			{ y: '2015-2-20', a: 75,  b: 65 },
+			{ y: '2015-2-21', a: 50,  b: 40 },
+			{ y: '2015-2-22', a: 75,  b: 65 },
+			{ y: '2015-2-23', a: 50,  b: 40 },
+			{ y: '2015-2-24', a: 75,  b: 65 },
+			{ y: '2015-2-25', a: 100, b: 90 }
+		];
 
           $( "#datetraffic1, #datetraffic2" ).datepicker({
             dateFormat: 'yy-mm-dd',
@@ -20,48 +44,19 @@
             'white-space':'nowrap',
             disable_search: true
         });
-        
-        new Morris.Bar({
-            // ID of the element in which to draw the chart.
-            element: 'bar-chart',
-            // Chart data records -- each entry in this array corresponds to a point on
-            // the chart.
-            data: [
-                { y: '2006', a: 30, b: 20 },
-                { y: '2007', a: 75,  b: 65 },
-                { y: '2008', a: 50,  b: 40 },
-                { y: '2009', a: 75,  b: 65 },
-                { y: '2010', a: 50,  b: 40 },
-                { y: '2011', a: 75,  b: 65 },
-                { y: '2012', a: 100, b: 90 }
-            ],
-            xkey: 'y',
-            ykeys: ['a', 'b'],
-            labels: ['Solved', 'Unresolved'],
-            barColors: ['#D9534F', '#F0AD4E'],
-            lineWidth: '1px',
-            fillOpacity: 0.8,
-            smooth: false,
-            hideHover: true
-        });
-        
-        new Morris.Bar({
+
+		var traffic_data = db_data;
+
+                
+        var traffic_total_bar = Morris.Bar({
             // ID of the element in which to draw the chart.
             element: 'stacked-chart',
             // Chart data records -- each entry in this array corresponds to a point on
             // the chart.
-            data: [
-                { y: '2006', a: 30, b: 20 },
-                { y: '2007', a: 75,  b: 65 },
-                { y: '2008', a: 50,  b: 40 },
-                { y: '2009', a: 75,  b: 65 },
-                { y: '2010', a: 50,  b: 40 },
-                { y: '2011', a: 75,  b: 65 },
-                { y: '2012', a: 100, b: 90 }
-            ],
+            data: traffic_data,
             xkey: 'y',
             ykeys: ['a', 'b'],
-            labels: ['Series A', 'Series B'],
+            labels: ['기 방문자', '미 방문자'],
             barColors: ['#1CAF9A', '#428BCA'],
             lineWidth: '1px',
             fillOpacity: 0.8,
@@ -69,25 +64,34 @@
             stacked: true,
             hideHover: true
         });
+	
+        var traffic_existing_bar = Morris.Bar({
+            // ID of the element in which to draw the chart.
+            element: 'bar-chart',
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
+            data: traffic_data,
+            xkey: 'y',
+            ykeys: ['a'],
+            labels: ['기 방문자'],
+            barColors: ['#1CAF9A'],
+            lineWidth: '1px',
+            fillOpacity: 0.8,
+            smooth: false,
+            hideHover: true
+        });
 
-        new Morris.Bar({
+
+        var traffic_new_bar = Morris.Bar({
             // ID of the element in which to draw the chart.
             element: 'bar-chart2',
             // Chart data records -- each entry in this array corresponds to a point on
             // the chart.
-            data: [
-                { y: '2006', a: 30, b: 20 },
-                { y: '2007', a: 75,  b: 65 },
-                { y: '2008', a: 50,  b: 40 },
-                { y: '2009', a: 75,  b: 65 },
-                { y: '2010', a: 50,  b: 40 },
-                { y: '2011', a: 75,  b: 65 },
-                { y: '2012', a: 100, b: 90 }
-            ],
+            data: traffic_data,
             xkey: 'y',
-            ykeys: ['a', 'b'],
-            labels: ['Solved', 'Unresolved'],
-            barColors: ['#D9534F', '#F0AD4E'],
+            ykeys: ['b'],
+            labels: ['미 방문자'],
+            barColors: ['#428BCA'],
             lineWidth: '1px',
             fillOpacity: 0.8,
             smooth: false,
@@ -191,4 +195,41 @@
         }, 40);
 
     // Flot Chart Dynamic Chart
-    });
+
+	function setData(start, end){
+		var ret = [];
+		var sdate, date;	
+		for (var i = 0; i < db_data.length; i++) {
+			sdate = db_data[i].y.split('-');
+			date = new Date(sdate[0], sdate[1], sdate[2]).valueOf();
+			if (date >= start && date <= end) {
+				ret.push({
+					y: db_data[i].y,
+					a: db_data[i].a,
+					b: db_data[i].b
+				});
+			}
+		}
+		return ret;
+	}
+
+	$("#btnsearch").click(function() {
+			var start = $("#datetraffic1").val();
+			var end = $("#datetraffic2").val();
+
+			var startDate = start.split('-');
+			var endDate = end.split('-');
+
+			var sDate = new Date(startDate[0], startDate[1], startDate[2]).valueOf();
+			var eDate = new Date(endDate[0], endDate[1], endDate[2]).valueOf();
+
+			if(sDate > eDate) {
+				alert("시간 구간을 제대로 설정해 주세요");
+				return;
+			}
+
+			traffic_total_bar.setData(setData(sDate, eDate));
+			traffic_existing_bar.setData(setData(sDate, eDate));
+			traffic_new_bar.setData(setData(sDate, eDate));
+	});
+});
